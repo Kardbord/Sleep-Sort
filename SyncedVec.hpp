@@ -42,7 +42,7 @@ public:
 
     // Obtains the item in m_vec[i] and returns a pointer to that item
     // Returns nullptr if m_vec is empty or if i is out of range
-    std::shared_ptr<T> operator[](int const & i) {
+    std::shared_ptr<T> operator[](int const & i) const {
         std::lock_guard<std::mutex> lock(m_mutex);
 
         if (i < 0 || i >= m_vec.size()) return nullptr;
@@ -53,6 +53,55 @@ public:
             return nullptr;
         }
     }
+
+    // Obtains the item in m_vec[i] and returns a pointer to that item
+    // Returns nullptr if m_vec is empty or if i is out of range
+    std::shared_ptr<T> at(int const & i) const {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
+        if (i < 0 || i >= m_vec.size()) return nullptr;
+
+        try {
+           return std::make_shared<T>(m_vec.at(i));
+        } catch(std::exception e) {
+            return nullptr;
+        }
+    }
+
+    // Obtains the item in m_vec[0] and returns a pointer to that item
+    // Returns nullptr if m_vec is empty
+    std::shared_ptr<T> front() const {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        if (m_vec.empty()) return nullptr;
+        return std::make_shared<T>(m_vec.front());
+    }
+
+    // Obtains the item in m_vec[m_vec.size()-1] and returns a pointer to that item
+    // Returns a nullptr if m_vec is empty
+    std::shared_ptr<T> back() const {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        if (m_vec.empty()) return nullptr;
+        return std::make_shared<T>(m_vec.back());
+    }
+
+    // Appends item to the m_vec 
+    void push_back(T const & item) {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_vec.push_back(item);
+    }
+
+    // Deletes the last element in m_vec
+    void pop_back() {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_vec.pop_back();
+    }
+
+    // Clears m_vec
+    void clear() {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_vec.clear();
+    }
+
 
 private:
 

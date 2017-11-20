@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "SyncedVec.hpp"
+
 // change to a larger uint to sort larger numbers
 using _uint_ = uint32_t;
 
