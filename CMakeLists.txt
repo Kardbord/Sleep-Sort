@@ -7,4 +7,5 @@ endif()
 
 add_executable(Sleep-Sort
     main.cpp
+    SyncedVec.hpp
 )
