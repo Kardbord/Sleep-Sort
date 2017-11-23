@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <thread>
+#include <chrono>
+#include <functional>
 
 #include "SyncedVec.hpp"
 
@@ -25,7 +28,21 @@ void initVec(int const & argc, char **argv, SyncedVec<_uint_> & c) {
             // Do nothing, keep trucking
         }
     }
-}   
+}
+
+void threadStart(SyncedVec<_uint_> & sortedList, _uint_ const & num) {
+    std::this_thread::sleep_for(std::chrono::seconds(num));
+    sortedList.push_back(num);
+}
+
+void sleep_sort(SyncedVec<_uint_> & c, SyncedVec<_uint_> & sortedList) {
+    std::vector<std::thread> threads;
+    for (int i = 0; i < c.size(); ++i) {
+        threads.push_back(std::thread(threadStart, std::ref(sortedList), *c[i]));
+    }
+
+    for (auto && th : threads) th.join();
+}
 
 // Input Arguments:
 //  - Path to an input file
@@ -36,16 +53,13 @@ int main(int argc, char **argv) {
 
     SyncedVec<_uint_> c;
 
-    // 1st cmd arg is program name
-    if (argc > 2) {
-        initVec(argc, argv, c);
-        for (int i = 0; i < c.size(); ++i) {
-            if (c[i] != nullptr) std::cout << *c[i] << std::endl;
-        }
-        // TODO: sort numbers
-    } else {
-        // TODO: open input file, sort numbers
-    }
+    SyncedVec<_uint_> sortedList;
 
+    initVec(argc, argv, c);
+    sleep_sort(c, sortedList);
+
+    for (int i = 0; i < sortedList.size(); ++i) {
+        std::cout << *sortedList[i] << std::endl;
+    }
     return EXIT_SUCCESS;
 }
