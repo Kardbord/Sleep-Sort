@@ -29,20 +29,20 @@ public:
     SyncedVec& operator=(SyncedVec const&) = delete;
 
     // Returns the size of m_vec
-    uint32_t size() const {
+    uint32_t size() {
         std::lock_guard<std::mutex> lock(m_mutex);
         return m_vec.size();
     }
 
     // Test whether or not m_vec is empty
-    bool empty() const {
+    bool empty() {
         std::lock_guard<std::mutex> lock(m_mutex);
         return m_vec.empty();
     }
 
     // Obtains the item in m_vec[i] and returns a pointer to that item
     // Returns nullptr if m_vec is empty or if i is out of range
-    std::shared_ptr<T> operator[](int const & i) const {
+    std::shared_ptr<T> operator[](int const & i) {
         std::lock_guard<std::mutex> lock(m_mutex);
 
         if (i < 0 || i >= m_vec.size()) return nullptr;
@@ -56,7 +56,7 @@ public:
 
     // Obtains the item in m_vec[i] and returns a pointer to that item
     // Returns nullptr if m_vec is empty or if i is out of range
-    std::shared_ptr<T> at(int const & i) const {
+    std::shared_ptr<T> at(int const & i) {
         std::lock_guard<std::mutex> lock(m_mutex);
 
         if (i < 0 || i >= m_vec.size()) return nullptr;
@@ -70,7 +70,7 @@ public:
 
     // Obtains the item in m_vec[0] and returns a pointer to that item
     // Returns nullptr if m_vec is empty
-    std::shared_ptr<T> front() const {
+    std::shared_ptr<T> front() {
         std::lock_guard<std::mutex> lock(m_mutex);
         if (m_vec.empty()) return nullptr;
         return std::make_shared<T>(m_vec.front());
@@ -78,7 +78,7 @@ public:
 
     // Obtains the item in m_vec[m_vec.size()-1] and returns a pointer to that item
     // Returns a nullptr if m_vec is empty
-    std::shared_ptr<T> back() const {
+    std::shared_ptr<T> back() {
         std::lock_guard<std::mutex> lock(m_mutex);
         if (m_vec.empty()) return nullptr;
         return std::make_shared<T>(m_vec.back());

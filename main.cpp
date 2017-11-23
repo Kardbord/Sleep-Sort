@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 #include "SyncedVec.hpp"
 
@@ -15,6 +16,17 @@ bool validateInputs(int const & argc) {
     return true;
 }
 
+void initVec(int const & argc, char **argv, SyncedVec<_uint_> & c) {
+    for (int i = 1; i < argc; ++i) {
+        try {
+            _uint_ u = std::stoul(std::string(argv[i]));
+            c.push_back(u);
+        } catch(std::exception e) {
+            // Do nothing, keep trucking
+        }
+    }
+}   
+
 // Input Arguments:
 //  - Path to an input file
 //  XOR
@@ -22,7 +34,14 @@ bool validateInputs(int const & argc) {
 int main(int argc, char **argv) {
     if (!validateInputs(argc)) return EXIT_FAILURE;
 
-    if (argc > 1) {
+    SyncedVec<_uint_> c;
+
+    // 1st cmd arg is program name
+    if (argc > 2) {
+        initVec(argc, argv, c);
+        for (int i = 0; i < c.size(); ++i) {
+            if (c[i] != nullptr) std::cout << *c[i] << std::endl;
+        }
         // TODO: sort numbers
     } else {
         // TODO: open input file, sort numbers
