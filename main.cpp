@@ -31,7 +31,7 @@ void initVec(int const & argc, char **argv, SyncedVec<_uint_> & c) {
 }
 
 void threadStart(SyncedVec<_uint_> & sortedList, _uint_ const & num) {
-    std::this_thread::sleep_for(std::chrono::seconds(num));
+    std::this_thread::sleep_for(std::chrono::milliseconds(num));
     sortedList.push_back(num);
 }
 
