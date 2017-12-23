@@ -46,9 +46,7 @@ void sleep_sort(SyncedVec<_uint_> & c, SyncedVec<_uint_> & sortedList) {
 }
 
 // Input Arguments:
-//  - Path to an input file
-//  XOR
-//  - Positive numbers to be sorted
+//  - Positive whole numbers to be sorted
 int main(int argc, char **argv) {
     if (!validateInputs(argc)) return EXIT_FAILURE;
 
